@@ -127,3 +127,9 @@ div.BRprogresspopup {
 #cboxMiddleLeft {
   height: 0 !important; /* Positions textarea correctly */
 }
+div#BRpage {
+    float: right;
+    width: 300px;
+    padding-left:12px;
+    text-align: right;
+}
