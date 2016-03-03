@@ -26,9 +26,9 @@ Drupal.settings.islandoraInternetArchiveBookReader_jQuery = jQuery.noConflict(tr
           $('#textSrch').hide();
           $('#btnSrch').hide();
         }
-//        if ($.browser.mobile && settings.islandoraInternetArchiveBookReader.mobilize) {
+        if ($.browser.mobile && settings.islandoraInternetArchiveBookReader.mobilize) {
           bookReader.goFullScreen();
-//        }
+        }
       });
     }
   };
