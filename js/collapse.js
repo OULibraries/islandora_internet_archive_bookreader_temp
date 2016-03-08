@@ -6,6 +6,7 @@
     Drupal.toggleFieldset = function (fieldset) {
         var $fieldset = $(fieldset);
 //        if ($fieldset.is('.collapsed')) {
+	    // Show the content of the detailes:
 //          var $content = $('> .fieldset-wrapper', fieldset).hide();
 	    var $content = $('> .fieldset-wrapper', fieldset);
             $fieldset
@@ -24,6 +25,7 @@
                     Drupal.collapseScrollIntoView(fieldset);
                 }
             });
+	  // Remove the code logic that hides the content
 //        }
 //        else {
 //            $fieldset.trigger({ type: 'collapsed', value: true });
@@ -87,7 +89,8 @@
                     .append($fieldset.hasClass('collapsed') ? Drupal.t('Show') : Drupal.t('Hide'))
                     .prependTo($legend)
                     .after(' ');
-	
+		
+		// remove the old text of the details div and add the new, formated text
 		$legend.html('');
                 var details = $('<H3>Details</H3>')
                     .prepend($legend.contents())
