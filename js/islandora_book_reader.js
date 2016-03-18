@@ -976,7 +976,7 @@
             ideal.height -= 45;
         }
 
-        ideal.height -= 20; // fudge factor
+        ideal.height -= 40; // fudge factor
         //console.log('init idealWidth='+ideal.width+' idealHeight='+ideal.height + ' ratio='+ratio);
 
         if (ideal.height/ratio <= ideal.width) {
