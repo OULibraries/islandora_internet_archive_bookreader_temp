@@ -101,6 +101,9 @@
 	
 		$("[class^='dc-']dt").each(function(){
 		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
 		});
 		$("[class^='dc-']dd").each(function(){
 		    var textNode = $(this).first();
@@ -110,13 +113,14 @@
 		    else{
 			var text = textNode.text();
 			if(!text || text == '' || text == "\n                  "){
-			    textNode.text('ok');			    
-//$(this).prepend("<div style='visibility:hidden'><span>No information to display</span></div>");
+			    $(this).prepend("<div style='visibility:hidden'><span>No information to display</span></div>");
 			}
 		    }
 		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
 		});
-	
 		$legend.append(summary);
             });
         }
