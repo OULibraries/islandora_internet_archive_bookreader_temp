@@ -98,7 +98,29 @@
 	
 		var fieldset = $fieldset.get(0);
                 Drupal.toggleFieldset(fieldset);
-
+	
+		$("[class^='dc-']dt").each(function(){
+		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
+		});
+		$("[class^='dc-']dd").each(function(){
+		    var textNode = $(this).first();
+		    if(!textNode){
+			$(this).prepend(document.createTextNode('Some text'));
+		    }
+		    else{
+			var text = textNode.text();
+			if(!text || text == '' || text == "\n                  "){
+			    $(this).prepend("<div style='visibility:hidden'><span>No information to display</span></div>");
+			}
+		    }
+		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
+		});
 		$legend.append(summary);
             });
         }
