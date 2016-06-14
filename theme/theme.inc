@@ -44,7 +44,7 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
       'tokenUri' => url('internet_archive_bookreader_get_image_uri/PID', array('absolute' => TRUE)),
       'djatokaUri' => 'https://repository.ou.edu/adore-djatoka',
       'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
-      'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
+      'compression' => variable_get('islandora_internet_archive_bookreader_compression', '1'),
       'pageProgression' => $variables['page_progression'],
       'pages' => $pages,
       'pageCount' => count($pages),
