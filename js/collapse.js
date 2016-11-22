@@ -5,8 +5,10 @@
      */
     Drupal.toggleFieldset = function (fieldset) {
         var $fieldset = $(fieldset);
-        if ($fieldset.is('.collapsed')) {
-            var $content = $('> .fieldset-wrapper', fieldset).hide();
+//        if ($fieldset.is('.collapsed')) {
+	    // Show the content of the detailes:
+//          var $content = $('> .fieldset-wrapper', fieldset).hide();
+	    var $content = $('> .fieldset-wrapper', fieldset);
             $fieldset
                 .removeClass('collapsed')
                 .trigger({ type: 'collapsed', value: false })
@@ -23,16 +25,17 @@
                     Drupal.collapseScrollIntoView(fieldset);
                 }
             });
-        }
-        else {
-            $fieldset.trigger({ type: 'collapsed', value: true });
-            $('> .fieldset-wrapper', fieldset).slideUp('fast', function () {
-                $fieldset
-                    .addClass('collapsed')
-                    .find('> legend span.fieldset-legend-prefix').html(Drupal.t('Show'));
-                fieldset.animating = false;
-            });
-        }
+	  // Remove the code logic that hides the content
+//        }
+//        else {
+//            $fieldset.trigger({ type: 'collapsed', value: true });
+//            $('> .fieldset-wrapper', fieldset).slideUp('fast', function () {
+//                $fieldset
+//                    .addClass('collapsed')
+//                    .find('> legend span.fieldset-legend-prefix').html(Drupal.t('Show'));
+//                fieldset.animating = false;
+//            });
+//        }
     };
 
     /**
@@ -86,22 +89,39 @@
                     .append($fieldset.hasClass('collapsed') ? Drupal.t('Show') : Drupal.t('Hide'))
                     .prependTo($legend)
                     .after(' ');
-
-                // .wrapInner() does not retain bound events.
-                var $link = $('<a class="fieldset-title" href="#"></a>')
+		
+		// remove the old text of the details div and add the new, formated text
+		$legend.html('');
+                var details = $('<H3>Details</H3>')
                     .prepend($legend.contents())
-                    .appendTo($legend)
-                    .click(function () {
-                        var fieldset = $fieldset.get(0);
-                        // Don't animate multiple times.
-                        if (!fieldset.animating) {
-                            fieldset.animating = true;
-                            Drupal.toggleFieldset(fieldset);
-                        }
-                        return false;
-                    });
-
-                $legend.append(summary);
+                    .appendTo($legend);
+	
+		var fieldset = $fieldset.get(0);
+                Drupal.toggleFieldset(fieldset);
+	
+		$("[class^='dc-']dt").each(function(){
+		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
+		});
+		$("[class^='dc-']dd").each(function(){
+		    var textNode = $(this).first();
+		    if(!textNode){
+			$(this).prepend(document.createTextNode('Some text'));
+		    }
+		    else{
+			var text = textNode.text();
+			if(!text || text == '' || text == "\n                  "){
+			    $(this).prepend("<div style='visibility:hidden'><span>No information to display</span></div>");
+			}
+		    }
+		    $(this).css('padding-right','100px');
+		    if($(window).width() < 548){
+		    	$(this).css('border','none');
+		    }
+		});
+		$legend.append(summary);
             });
         }
     };

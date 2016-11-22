@@ -930,4 +930,77 @@
         this.autoStop();
     }
   }
+
+  IslandoraBookReader.prototype.getIdealSpreadSize = function(firstIndex, secondIndex) {
+        var ideal = {};
+
+        // We check which page is closest to a "normal" page and use that to set the height
+        // for both pages.  This means that foldouts and other odd size pages will be displayed
+        // smaller than the nominal zoom amount.
+        var canon5Dratio = 1.5;
+
+        var first = {
+            height: this._getPageHeight(firstIndex),
+            width: this._getPageWidth(firstIndex)
+        }
+
+        var second = {
+            height: this._getPageHeight(secondIndex),
+            width: this._getPageWidth(secondIndex)
+        }
+
+        var firstIndexRatio  = first.height / first.width;
+        var secondIndexRatio = second.height / second.width;
+        //console.log('firstIndexRatio = ' + firstIndexRatio + ' secondIndexRatio = ' + secondIndexRatio);
+
+        var ratio;
+        if (Math.abs(firstIndexRatio - canon5Dratio) < Math.abs(secondIndexRatio - canon5Dratio)) {
+            ratio = firstIndexRatio;
+        } else {
+            ratio = secondIndexRatio;
+        }
+
+        var totalLeafEdgeWidth = parseInt(this.numLeafs * 0.1);
+        var maxLeafEdgeWidth   = parseInt($('#BRcontainer').attr('clientWidth') * 0.1);
+        ideal.totalLeafEdgeWidth     = Math.min(totalLeafEdgeWidth, maxLeafEdgeWidth);
+
+        var widthOutsidePages = 2 * (this.twoPage.coverInternalPadding + this.twoPage.coverExternalPadding) + ideal.totalLeafEdgeWidth;
+        var heightOutsidePages = 2* (this.twoPage.coverInternalPadding + this.twoPage.coverExternalPadding);
+
+        ideal.width = ($('#BRcontainer').width() - widthOutsidePages) >> 1;
+        ideal.width -= 10; // $$$ fudge factor
+        ideal.height = $('#BRcontainer').height() - heightOutsidePages;
+
+        var ui = Drupal.behaviors.getParamByName("ui");
+        if(ui && ui == "embed"){
+            ideal.height -= 45;
+        }
+
+        ideal.height -= 40; // fudge factor
+        //console.log('init idealWidth='+ideal.width+' idealHeight='+ideal.height + ' ratio='+ratio);
+
+        if (ideal.height/ratio <= ideal.width) {
+            //use height
+            ideal.width = parseInt(ideal.height/ratio);
+        } else {
+            //use width
+            ideal.height = parseInt(ideal.width*ratio);
+        }
+
+        // $$$ check this logic with large spreads
+        ideal.reduce = ((first.height + second.height) / 2) / ideal.height;
+
+        return ideal;
+    }
+    
+    Drupal.behaviors.getParamByName = function(name, url){
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    };
+
 })(jQuery);
