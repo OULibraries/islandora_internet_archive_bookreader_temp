@@ -123,14 +123,14 @@
 		});
 		$legend.append(summary);
             });
-            
+           
             var islandora_book_metadata_div = $(".islandora-book-metadata");
             if(islandora_book_metadata_div && islandora_book_metadata_div.length === 1){
                 var pid = Drupal.settings.islandoraInternetArchiveBookReader.book;
                 var uuid = pid.toString().trim().split(":")[1];
                 if(uuid !== null && typeof(uuid) !== undefined){
 //                    alert('uuid = '+uuid);//https://repository.ou.edu/uuid/0918f030-2c26-59f4-ba72-ba495545f6a7/datastream/MODS/download
-                    var mods_downlink_div = $("<div id=\"mods_downlink_div\"><ul><li><a class=\"download_link\" href=\"/uuid/"+uuid+"/datastream/MODS/download"+"\" >Download MODS metadata file here</a></li></ul></div>");
+                    var mods_downlink_div = $("<br><div id=\"mods_downlink_div\"><ul><li><a class=\"download_link\" href=\"/uuid/"+uuid+"/datastream/MODS/download"+"\" >Download MODS metadata file here</a></li></ul></div>");
                     islandora_book_metadata_div.append(mods_downlink_div);
                 }
                 
