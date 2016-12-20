@@ -228,3 +228,49 @@ function islandora_internet_archive_bookreader_info_fields(AbstractObject $objec
   // Remove empty fields.
   return array_filter($fields);
 }
+
+/**
+ * Retrieves the list of primary authors.
+ *
+ * @param AbstractObject $object
+ *   The object to fetch the information from.
+ *
+ * @return array
+ *   Any associative array where the key is the author name and value (if any) is the date
+ */
+function islandora_internet_archive_bookreader_info_primary_authors(AbstractObject $object) {
+  if (!(isset($object['MODS']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object['MODS']))) {
+    return array();
+  }
+  $fields = array(    
+      'Name' => array('//mods:name[@usage="primary"]', 'mods:namePart[not(@*)]'),
+  );
+  $xml = simplexml_load_string($object['MODS']->content);
+  $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+  $to_string = function($o) {
+    return (string) $o;
+  };
+  // Query each context node with the given xpath.
+  $query_each_context = function (array $contexts, $xpath) {
+    $query = function(&$context, $key, $xpath) {
+      $context->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
+      $context = $context->xpath($xpath);
+    };
+    // Map values to each context node.
+    array_walk($contexts, $query, $xpath);
+    // Flatten to an array of values.
+    return count($contexts) ? call_user_func_array('array_merge', $contexts) : array();
+  };
+  // Query the given xpath. If the xpath is any array the first value is the
+  // xpath for the context node(s) and the second the path to the value fields.
+  $query = function(SimpleXMLElement $xml, $xpath) use(&$query_each_context) {
+    return is_string($xpath) ? $xml->xpath($xpath) : $query_each_context($xml->xpath($xpath[0]), $xpath[1]);
+  };
+  foreach ($fields as $label => $xpath) {
+    $results = $query($xml, $xpath);
+    // Remove empty values.
+    $fields[$label] = array_filter(array_map($to_string, $results));
+  }
+  // Remove empty fields.
+  return array_filter($fields)['Name'];
+}
