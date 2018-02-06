@@ -17,12 +17,20 @@
                 duration: 'fast',
                 easing: 'linear',
                 complete: function () {
-                    Drupal.collapseScrollIntoView(fieldset);
+                  // FIXME
+                  // We'er misusing js to make sure some fieldsets are never
+                  // collapsed, so we have to disable scrolling when we toggle
+                  // them. 
+                    //Drupal.collapseScrollIntoView(fieldset);
                     fieldset.animating = false;
                 },
                 step: function () {
+                  // FIXME
+                  // We'er misusing js to make sure some fieldsets are never
+                  // collapsed, so we have to disable scrolling when we toggle
+                  // them.
                     // Scroll the fieldset into view.
-                    Drupal.collapseScrollIntoView(fieldset);
+                    //Drupal.collapseScrollIntoView(fieldset);
                 }
             });
 	  // Remove the code logic that hides the content
